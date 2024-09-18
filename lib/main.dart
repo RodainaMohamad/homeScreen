@@ -4,6 +4,7 @@ import 'package:trial_hpg/ui/tabs/CategoriesPage/Categories.dart';
 import 'package:trial_hpg/ui/tabs/homePage/homepg.dart';
 
 void main() {
+
   runApp(MyApp());
 }
 
