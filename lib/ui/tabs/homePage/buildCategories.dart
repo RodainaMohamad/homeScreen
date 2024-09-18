@@ -7,19 +7,18 @@ import 'package:trial_hpg/ui/tabs/homePage/widgets/productItem.dart';
 Widget buildCategories (List<categoryDM>list)=>
     GridView.builder(
       itemCount: list.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
       scrollDirection: Axis.horizontal,
       itemBuilder: (context,index){
-        return CategoryItem();
+        return CategoryItem(list[index]);
       },
     );
-
 
 Widget buildProducts (List<ProductDM>list)=>
     ListView.builder(
       itemCount: list.length,
       scrollDirection: Axis.horizontal,
       itemBuilder: (context,index){
-        return Product();
+        return Product(list[index]);
       },
     );
