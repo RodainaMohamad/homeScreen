@@ -4,7 +4,6 @@ import 'package:trial_hpg/ui/tabs/CategoriesPage/Categories.dart';
 import 'package:trial_hpg/ui/tabs/homePage/homepg.dart';
 
 void main() {
-
   runApp(MyApp());
 }
 
@@ -19,8 +18,6 @@ class MyApp extends StatelessWidget {
       routes: {
         'Home': (context) => MainLayout(body: Home(), initialIndex: 0),
         'categories': (context) => MainLayout(body: categories(), initialIndex: 1),
-        // 'Home': (context) => Home(), // fav screen
-        // 'Home': (context) => Home(),
       },
     );
   }

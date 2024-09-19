@@ -12,6 +12,7 @@ import 'package:trial_hpg/ui/tabs/homePage/widgets/ads.dart';
 import 'package:trial_hpg/ui/tabs/homePage/widgets/sections.dart';
 import 'package:trial_hpg/ui/utilities/constants/BaseStates.dart';
 
+import '../../../data/model/response/ProductDM.dart';
 
 class Home extends StatefulWidget {
   static const String routeName = "Home";
@@ -23,7 +24,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeTabState extends State<Home> {
-  //late HomeViewModel viewModel;
+  HomeViewModel viewModel=getIt();
   int _adsIndex = 0;
   late Timer _timer;
 
@@ -36,6 +37,8 @@ class _HomeTabState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    viewModel.LoadCategories();
+    viewModel.LoadProducts();
     _startImageSwitching();
   }
 
@@ -110,7 +113,7 @@ class _HomeTabState extends State<Home> {
                 secName: 'Categories',
               ),
               BlocBuilder(
-                bloc: getIt<HomeViewModel>().getAllCategoriesUseCase,
+                bloc:viewModel.getAllCategoriesUseCase,
                   builder: (context,state){
                   if(state is BaseSuccessState<categoryDM>){
                     return buildCategories(state.data as List<categoryDM>);

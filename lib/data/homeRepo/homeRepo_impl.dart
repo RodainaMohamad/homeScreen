@@ -9,7 +9,7 @@ import 'package:trial_hpg/domain/repo/homeRepo.dart';
 import 'package:trial_hpg/ui/utilities/constants/consts.dart';
 import 'package:trial_hpg/ui/utilities/extensions/extensions.dart';
 
-@injectable
+@Injectable(as:HomeRepo)
 class HomeRepoImpl extends HomeRepo {
   Connectivity connectivity;
   HomeDs ds;

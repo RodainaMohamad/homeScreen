@@ -8,5 +8,4 @@ abstract class HomeRepo{
   Future<Either<Failure, List<categoryDM>>> getCategories();
 
   Future<Either<Failure,List<ProductDM>>> getProducts();
-
 }

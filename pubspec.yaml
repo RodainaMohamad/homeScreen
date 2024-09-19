@@ -39,6 +39,7 @@ dependencies:
   connectivity_plus: ^6.0.5
   flutter_bloc: ^8.1.6
   get_it: ^7.6.7
+  get_it_mixin: ^4.2.2
   injectable: ^2.3.5
   cached_network_image: ^3.3.0
 

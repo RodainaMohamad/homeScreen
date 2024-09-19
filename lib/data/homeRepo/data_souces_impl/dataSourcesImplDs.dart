@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart';
+import 'package:injectable/injectable.dart';
 import 'package:trial_hpg/data/model/failure.dart';
 import 'package:trial_hpg/data/model/response/CategoriesResponse.dart';
 import 'package:trial_hpg/data/model/response/ProductDM.dart';
@@ -10,6 +11,7 @@ import 'package:trial_hpg/ui/utilities/constants/end_points.dart';
 import '../../../domain/repo/data_souces/homeDs.dart';
 import '../../../ui/utilities/constants/consts.dart';
 
+@Injectable(as:HomeDs)
 class DataSourcesImpl extends HomeDs {
   @override
   Future<Either<Failure, List<categoryDM>>> getCategories() async {
