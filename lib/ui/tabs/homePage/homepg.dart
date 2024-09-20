@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trial_hpg/data/model/response/CategoryDm.dart';
+import 'package:trial_hpg/data/model/response/categoryDm.dart';
 import 'package:trial_hpg/domain/getIt.dart';
-import 'package:trial_hpg/domain/repo/homeRepo.dart';
-import 'package:trial_hpg/domain/use%20Cases/GetAllCategories_UseCase.dart';
-import 'package:trial_hpg/domain/use%20Cases/GetAllProducts_UseCase.dart';
 import 'package:trial_hpg/ui/tabs/homePage/HomeViewModel.dart';
 import 'package:trial_hpg/ui/tabs/homePage/buildCategories.dart';
+import 'package:trial_hpg/ui/tabs/homePage/product_view_model.dart';
 import 'package:trial_hpg/ui/tabs/homePage/widgets/ErrorView.dart';
 import 'package:trial_hpg/ui/tabs/homePage/widgets/HomeAppliances.dart';
 import 'package:trial_hpg/ui/tabs/homePage/widgets/Loading.dart';
@@ -16,9 +14,11 @@ import 'package:trial_hpg/ui/tabs/homePage/widgets/sections.dart';
 import 'package:trial_hpg/ui/utilities/constants/BaseStates.dart';
 
 import '../../../data/model/response/ProductDM.dart';
+import '../../utilities/constants/product_state.dart';
 
 class Home extends StatefulWidget {
   static const String routeName = "Home";
+
   const Home({super.key});
 
   @override
@@ -27,6 +27,7 @@ class Home extends StatefulWidget {
 
 class _HomeTabState extends State<Home> {
   late HomeViewModel _homeViewModel;
+  late ProductViewModel _productViewModel;
   int _adsIndex = 0;
   late Timer _timer;
 
@@ -40,8 +41,9 @@ class _HomeTabState extends State<Home> {
   void initState() {
     super.initState();
     _homeViewModel = locator<HomeViewModel>();
+    _productViewModel = locator<ProductViewModel>();
+    _productViewModel.LoadProducts() ;
     _homeViewModel.LoadCategories();
-    _homeViewModel.LoadProducts();
     _startImageSwitching();
   }
 
@@ -68,7 +70,9 @@ class _HomeTabState extends State<Home> {
         elevation: 0,
       ),
       body: GestureDetector(
-        onTap: () {FocusScope.of(context).unfocus();},
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -84,14 +88,16 @@ class _HomeTabState extends State<Home> {
                         hintText: 'What do you search for?',
                         hintStyle: const TextStyle(color: Colors.blue),
                         enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 0.5),
                           borderRadius: BorderRadius.horizontal(
                             left: Radius.circular(20.0),
                             right: Radius.circular(20.0),
                           ),
                         ),
                         focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Colors.blue, width: 2.0),
                           borderRadius: BorderRadius.horizontal(
                             left: Radius.circular(20.0),
                             right: Radius.circular(20.0),
@@ -101,8 +107,9 @@ class _HomeTabState extends State<Home> {
                     ),
                   ),
                   IconButton(
-                      onPressed: () {}, // Navigation to cart screen //
-                     icon: Image.asset('assets/cart.png'),)
+                    onPressed: () {}, // Navigation to cart screen //
+                    icon: Image.asset('assets/cart.png'),
+                  )
                 ],
               ),
               Ads(
@@ -114,34 +121,38 @@ class _HomeTabState extends State<Home> {
                 function: () {}, //Navigation to categories screen//
                 secName: 'Categories',
               ),
-              BlocBuilder(
+              BlocConsumer(
                 bloc: locator<HomeViewModel>(),
                 builder: (context, state) {
-                  if (state is BaseInitialState) {
-                    return LoadingWidget(); // or a splash screen
-                  } else if (state is BaseSuccessState<categoryDM>) {
-                    return buildCategories(state.data as List<categoryDM>);
-                  } else if (state is BaseErrorState) {
-                    return ErrorView(message: state.errorMessage);
+                  if (state is BaseLoadingState) {
+                    return LoadingWidget(); // Show loading indicator
+                  } if (state is BaseSuccessState<List<categoryDM>>) {
+                    return buildCategories(
+                        state.data); // Display categories when loaded
+                  }  if (state is BaseErrorState) {
+                    return ErrorView(
+                        message: state.errorMessage); // Show error message
                   } else {
-                    return LoadingWidget();
+                    return LoadingWidget(); // Default fallback to loading
                   }
-                },
+                }, listener: (BuildContext context, Object? state) {
+
+              },
               ),
               const SizedBox(height: 12),
               HomeAppliances(),
               BlocBuilder(
-                bloc: locator<HomeViewModel>(),
+                bloc: locator<ProductViewModel>(),
                 builder: (context, state) {
                   print('State: $state');
-                  if (state is BaseSuccessState<ProductDM>) {
-                    return buildProducts(state.data as List<ProductDM>);
-                  } else if (state is BaseErrorState) {
+                  if (state is ProductSuccessState<List<ProductDM>>) {
+                    return buildProducts(state.data);
+                  }  if (state is ProductErrorState) {
                     return ErrorView(message: state.errorMessage);
-                  } else if (state is BaseInitialState) {
+                  }  if (state is ProductLoadingState) {
                     return LoadingWidget();
                   } else {
-                    return LoadingWidget();
+                    return Container(color: Colors.red,);
                   }
                 },
               )

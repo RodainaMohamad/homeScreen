@@ -1,20 +1,18 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:trial_hpg/data/model/failure.dart';
-import 'package:trial_hpg/data/model/response/ProductDM.dart';
-import 'package:trial_hpg/domain/repo/homeRepo.dart';
-import 'package:trial_hpg/ui/utilities/constants/BaseStates.dart';
+
+import '../../data/model/failure.dart';
+import '../../data/model/response/ProductDM.dart';
+import '../repo/homeRepo.dart';
 
 @injectable
-class GetAllProductsUseCase extends Cubit{
+class GetAllProductsUseCase {
   HomeRepo repo;
-  GetAllProductsUseCase(this.repo):super(BaseInitialState());
 
-  void excute()async{
-   await repo.getProducts();
-    Either<Failure,List<ProductDM>> either=await repo.getProducts();
-    either.fold((failure)=>emit(BaseErrorState(failure.errorMessage)),
-            (list)=>emit(BaseSuccessState<List<ProductDM>>(data: list)));
+  GetAllProductsUseCase(this.repo);
+
+  Future<Either<Failure, List<ProductDM>>> execute() async {
+    print('Executing getProducts');
+    return await repo.getProducts();
   }
 }

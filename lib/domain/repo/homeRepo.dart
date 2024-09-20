@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:trial_hpg/data/model/response/CategoryDm.dart';
+import 'package:trial_hpg/data/model/response/categoryDm.dart';
 import 'package:trial_hpg/data/model/response/ProductDM.dart';
 import '../../../data/model/failure.dart';
 

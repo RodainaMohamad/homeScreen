@@ -8,6 +8,6 @@ class BaseErrorState{
 }
 
 class BaseSuccessState<Type>{
-  Type? data;
-  BaseSuccessState({this.data});
+  Type data;
+  BaseSuccessState({required this.data});
 }

@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:trial_hpg/data/model/response/CategoryDm.dart';
+import 'package:trial_hpg/data/model/response/categoryDm.dart';
 
 class CategoryItem extends StatelessWidget {
   final categoryDM category;
