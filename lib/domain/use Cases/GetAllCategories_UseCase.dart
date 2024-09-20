@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:trial_hpg/data/homeRepo/homeRepo_impl.dart';
 import 'package:trial_hpg/data/model/failure.dart';
 import 'package:trial_hpg/data/model/response/CategoryDm.dart';
 import 'package:trial_hpg/domain/repo/homeRepo.dart';

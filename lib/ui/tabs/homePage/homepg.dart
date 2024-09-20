@@ -125,8 +125,7 @@ class _HomeTabState extends State<Home> {
                     return ErrorView(message: state.errorMessage);
                   } else {
                     return LoadingWidget();
-                  }
-                },
+                  }},
               ),
               const SizedBox(height: 12),
               HomeAppliances(),
@@ -142,8 +141,7 @@ class _HomeTabState extends State<Home> {
                     return LoadingWidget();
                   } else {
                     return LoadingWidget();
-                  }
-                },
+                  }},
               )
             ],
           ),
