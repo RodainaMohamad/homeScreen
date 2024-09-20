@@ -13,11 +13,11 @@ import 'package:trial_hpg/ui/utilities/extensions/extensions.dart';
 class HomeRepoImpl extends HomeRepo {
   Connectivity connectivity;
   HomeDs ds;
-
   HomeRepoImpl(this.connectivity, this.ds);
 
   @override
   Future<Either<Failure, List<categoryDM>>> getCategories() async {
+    print('Fetching categories from repository');
     if (await connectivity.isConnected()) {
       ds.getCategories();
     } else {
@@ -28,6 +28,7 @@ class HomeRepoImpl extends HomeRepo {
 
   @override
   Future<Either<Failure, List<ProductDM>>> getProducts() async {
+    print('Fetching products from repository');
     if (await connectivity.isConnected()) {
       ds.getProducts();
     } else {

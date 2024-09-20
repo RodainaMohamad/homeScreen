@@ -12,11 +12,13 @@ class HomeViewModel extends Cubit {
   HomeViewModel(this.getAllCategoriesUseCase, this.getAllProductsUseCase)
       : super(BaseInitialState());
 
-  void LoadCategories() {
+  void LoadCategories()async {
+    print('Loading categories');
     getAllCategoriesUseCase.excute();
   }
 
-  void LoadProducts() {
+  void LoadProducts()async{
+    print('Loading products');
     getAllProductsUseCase.excute();
   }
 }

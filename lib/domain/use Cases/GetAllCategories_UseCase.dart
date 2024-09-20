@@ -7,14 +7,28 @@ import 'package:trial_hpg/domain/repo/homeRepo.dart';
 import 'package:trial_hpg/ui/utilities/constants/BaseStates.dart';
 
 @injectable
-class GetAllCategoriesUseCase extends Cubit{
+class GetAllCategoriesUseCase extends Cubit {
   HomeRepo repo;
-  GetAllCategoriesUseCase(this.repo):super(BaseInitialState());
+  GetAllCategoriesUseCase(this.repo) : super(BaseInitialState());
 
-  void excute()async{
-    await repo.getCategories();
-    Either<Failure,List<categoryDM>> either=await repo.getCategories();
-    either.fold((failure)=>emit(BaseErrorState(failure.errorMessage)),
-        (list)=>emit(BaseSuccessState<List<categoryDM>>(data: list)));
+  void excute() async {
+    print('Executing getCategories');
+    try {
+      Either<Failure, List<categoryDM>> either = await repo.getCategories();
+      print('Either value: $either');
+      either.fold(
+            (failure) {
+          print('getCategories failed: ${failure.errorMessage}');
+          emit(BaseErrorState(failure.errorMessage));
+        },
+            (list) {
+          print('getCategories succeeded: ${list.length} items');
+          emit(BaseSuccessState<List<categoryDM>>(data: list));
+        },
+      );
+    } catch (e) {
+      print('Error: $e');
+      emit(BaseErrorState('An unexpected error occurred'));
+    }
   }
 }

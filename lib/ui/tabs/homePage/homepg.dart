@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trial_hpg/data/model/response/CategoryDm.dart';
 import 'package:trial_hpg/domain/getIt.dart';
+import 'package:trial_hpg/domain/repo/homeRepo.dart';
+import 'package:trial_hpg/domain/use%20Cases/GetAllCategories_UseCase.dart';
+import 'package:trial_hpg/domain/use%20Cases/GetAllProducts_UseCase.dart';
 import 'package:trial_hpg/ui/tabs/homePage/HomeViewModel.dart';
 import 'package:trial_hpg/ui/tabs/homePage/buildCategories.dart';
 import 'package:trial_hpg/ui/tabs/homePage/widgets/ErrorView.dart';
@@ -16,7 +19,6 @@ import '../../../data/model/response/ProductDM.dart';
 
 class Home extends StatefulWidget {
   static const String routeName = "Home";
-
   const Home({super.key});
 
   @override
@@ -24,7 +26,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeTabState extends State<Home> {
-  HomeViewModel viewModel=getIt();
+  late HomeViewModel _homeViewModel;
   int _adsIndex = 0;
   late Timer _timer;
 
@@ -37,8 +39,9 @@ class _HomeTabState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    viewModel.LoadCategories();
-    viewModel.LoadProducts();
+    _homeViewModel = locator<HomeViewModel>();
+    _homeViewModel.LoadCategories();
+    _homeViewModel.LoadProducts();
     _startImageSwitching();
   }
 
@@ -74,10 +77,6 @@ class _HomeTabState extends State<Home> {
                   Expanded(
                     child: TextField(
                       decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                          onPressed: () {}, // Navigation to cart screen //
-                          icon: Image.asset('assets/cart.png'),
-                        ),
                         prefixIcon: IconButton(
                           onPressed: () {},
                           icon: Image.asset('assets/search.png'),
@@ -101,6 +100,9 @@ class _HomeTabState extends State<Home> {
                       ),
                     ),
                   ),
+                  IconButton(
+                      onPressed: () {}, // Navigation to cart screen //
+                     icon: Image.asset('assets/cart.png'),)
                 ],
               ),
               Ads(
@@ -113,31 +115,36 @@ class _HomeTabState extends State<Home> {
                 secName: 'Categories',
               ),
               BlocBuilder(
-                bloc:viewModel.getAllCategoriesUseCase,
-                  builder: (context,state){
-                  if(state is BaseSuccessState<categoryDM>){
+                bloc: locator<HomeViewModel>(),
+                builder: (context, state) {
+                  if (state is BaseInitialState) {
+                    return LoadingWidget(); // or a splash screen
+                  } else if (state is BaseSuccessState<categoryDM>) {
                     return buildCategories(state.data as List<categoryDM>);
-                  }
-                  else if(state is BaseErrorState){
+                  } else if (state is BaseErrorState) {
                     return ErrorView(message: state.errorMessage);
-                  }
-                  else{
+                  } else {
                     return LoadingWidget();
                   }
-                  }),
-              // BlocBuilder(
-              //   bloc: viewModel.getAllProductsUseCase,
-              //     builder:(context,state){
-              //       if(state is BaseSuccessState<ProductDM>){
-              //         return buildProducts(state.data!);
-              //       }else if(state is BaseErrorState){
-              //         return ErrorView(message: state.errorMessage);
-              //       }else{
-              //         return LoadingWidget();
-              //       }
-              //     }),
+                },
+              ),
               const SizedBox(height: 12),
               HomeAppliances(),
+              BlocBuilder(
+                bloc: locator<HomeViewModel>(),
+                builder: (context, state) {
+                  print('State: $state');
+                  if (state is BaseSuccessState<ProductDM>) {
+                    return buildProducts(state.data as List<ProductDM>);
+                  } else if (state is BaseErrorState) {
+                    return ErrorView(message: state.errorMessage);
+                  } else if (state is BaseInitialState) {
+                    return LoadingWidget();
+                  } else {
+                    return LoadingWidget();
+                  }
+                },
+              )
             ],
           ),
         ),
